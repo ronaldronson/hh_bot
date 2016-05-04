@@ -1,6 +1,6 @@
 'use strict'
 
-var mem = {}
+const mem = {}
 
 module.exports = {
   set: ($, req) => {

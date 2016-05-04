@@ -1,6 +1,6 @@
 'use strict'
 
-var validation = require('./validation')
+const validation = require('./validation')
 
 function name($) {
   return $.user.first_name

@@ -1,16 +1,16 @@
 'use strict'
 
-var api = require('./api')
-var form = require('./form')
-var io = require('./io')
-var url = require('./url')
+const api = require('./api')
+const form = require('./form')
+const io = require('./io')
+const url = require('./url')
 
 function run($, req) {
   $.sendMessage('Let me check what we have for you...')
   api.loadXml(url.toAPI(req.postcode, req.query), name => {
-    var txt = !!name
-     ? 'Look what I have found!\n' + url.toHH(name)
-     : 'Have a look at those restaurants: \n' + url.toHH(req.postcode, req.query)
+    const txt = !!name
+     ? 'Look what I have found!\n' + url.toRest(name, req.postcode)
+     : 'Have a look at those restaurants: \n' + url.toSearch(req.query, req.postcode)
     $.sendMessage(txt + '\n\nSearch another /postcode or /food or maybe you want to /start again?')
   })
 }

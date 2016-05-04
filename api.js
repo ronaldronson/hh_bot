@@ -1,7 +1,7 @@
 'use strict'
 
-var request = require('request')
-var parser = require('xml-parser')
+const request = require('request')
+const parser = require('xml-parser')
 
 function transformRestName(str) {
   return (str || '')
@@ -18,7 +18,7 @@ function normalizeSearch(str) {
 }
 
 function parseXml(xml) {
-  var rest = parser(xml).root
+  const rest = parser(xml).root
     .children[1] // result
     .children[2] // restaurants
     .children
@@ -34,7 +34,7 @@ function parseXml(xml) {
 
   // console.log(rest)
 
-  var attr = rest.children
+  const attr = rest.children
     .filter(prop => prop.attributes.type === 'name').pop()
 
   console.log('find rest: ', attr.content || '[empty value]')
