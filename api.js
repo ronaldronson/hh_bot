@@ -4,19 +4,23 @@ const request = require('request')
 const headers = require('./config').headers
 const parser = require('xml-parser')
 
-function transformRestName(str) {
-  return (str || '')
+const transformRestName = str =>
+  (str || '')
     .toLocaleLowerCase()
     .replace(/@/g, 'at')
     .replace(/ /g, '-')
-}
 
-function normalizeSearch(str) {
-  return (str || '')
+const normalizeSearch = str =>
+  (str || '')
     .toLocaleLowerCase()
     .trim()
     .split(' ').shift()
-}
+
+const filterType = type =>
+  prop => prop.attributes.type === type
+
+const filterSponsored = rest =>
+  !rest.children.filter(filterType('sponsor')).shift()
 
 function parseXml(xml) {
   try {
@@ -24,8 +28,7 @@ function parseXml(xml) {
       .children[1] // result
       .children[3] // restaurants
       .children
-       // filter sponsored
-      .filter(rest => !rest.children.filter(prop => prop.attributes.type === 'sponsor').shift())
+      .filter(filterSponsored) // filter sponsored
       .pop() // take first restaurant
 
     if (!rest) {
@@ -34,8 +37,7 @@ function parseXml(xml) {
       return false
     }
 
-    const attr = rest.children
-      .filter(prop => prop.attributes.type === 'name').pop()
+    const attr = rest.children.filter(filterType('name')).pop()
 
     console.log('find rest: ', attr.content || '[empty value]')
     return transformRestName(attr.content) || false
@@ -45,7 +47,7 @@ function parseXml(xml) {
   }
 }
 
-function loadXml(url, done) {
+module.exports.loadXml = (url, done) => {
   console.log('req url: ', url)
   request({
     uri: normalizeSearch(url),
@@ -54,5 +56,3 @@ function loadXml(url, done) {
       done(parseXml(body))
   })
 }
-
-module.exports.loadXml = loadXml
