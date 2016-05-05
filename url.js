@@ -17,8 +17,8 @@ module.exports = {
     config.domain + '/' + name + '/?postcode=' + postcode,
 
   toAPI: (postcode, term) =>
-    config.domain + '/api/iphone-'
-      + config.hh_token + '/search/'
+    config.domain + '/api/android-'
+      + config.hh_token + '/quicksearch/'
       + normilizePostcode(postcode)
       + '/All/0-5/?q=' + term
 }
